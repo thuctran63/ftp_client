@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .container{
+            width: 100vw;
+            height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 7fr;
+            grid-template-rows: 1fr 7fr;
+            padding: 0;
+            margin: 0;
+        }
+        .header{
+            display:  flex;    
+            grid-column: 1/3;
+            grid-row: 1/2;
+            border: 1px solid whitesmoke;
+        }
+            .logo{
+                display: flex;
+                height: auto;
+                width: auto;
+                justify-content: center;
+            }
+        
+        .nav{
+            grid-column: 1/2;
+            grid-row: 2/3;
+            border: 1px solid whitesmoke;
+        }
+            .item{
+                list-style: none;
+                padding: 10px;
+                margin: 10px;
+                text-align: center;
+                text-decoration: none;
+                border: 1px solid black;
+            }
+            .item a{
+                text-decoration: none;
+                color: black;
+                font-family: "Google Sans",Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+                font-weight: bold;
+            }
+
+        .content{
+            grid-column: 2/3;
+            grid-row: 2/3;
+        }
+            iframe{
+                width: 99%;
+                height: 99%;
+            }
+    </style>
+    <script>
+
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <img src="images/logo.png" alt="">
+            </div>
+    
+            <div class="user">
+    
+            </div>
+        </div>
+    
+        <div class="nav">
+            <li class="item"><a href="sendFile.html" target="frame_main">Gửi file</a></li>
+            <li class="item"><a href="#home">Các file đã nhận</a></li>
+            <li class="item"><a href="#home">Các file đã gửi</a></li>
+            <li class="item"><a href="#home">More</a></li>
+        </div>
+        <div class="content">
+            <iframe src="" frameborder="0" name="frame_main"></iframe>
+        </div>
+    </div>
+</body>
+</html>
