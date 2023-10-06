@@ -1,14 +1,16 @@
-package com.example.server;
+package com.example.web.server;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 
 
 public class FTPServer {
-    private int port = 21;
+    private int port = 2023;
     private String rootDir = System.getProperty("user.dir") + "\\" + "PublicFolder";
-    private ServerSocket serverSocket = null;
+    private ArrayList<Socket> currenSockets = new ArrayList<Socket>();
+    public ServerSocket serverSocket = null;
 
     private static FTPServer instance;
 
@@ -29,6 +31,7 @@ public class FTPServer {
             while (true) {
                 Socket clientSocket = serverSocket.accept();
                 new Thread(new ProcessClient(clientSocket,rootDir)).start();
+                currenSockets.add(clientSocket);
                 System.out.println("New client connected:" + clientSocket.getInetAddress().getHostAddress());
             }
             

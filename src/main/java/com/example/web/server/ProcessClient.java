@@ -1,4 +1,4 @@
-package com.example.server;
+package com.example.web.server;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -29,8 +29,6 @@ public class ProcessClient implements Runnable {
                 if (command.equals("FILE_SEND_FROM_CLIENT")) {
                     System.out.println("Client " + ipAdress + " is sending file to server");
                     receiveFile(clientSocket);
-                } else if (command.equals("LIST_FILES")) {
-                    showListFile(clientSocket);
                 } else if (command.equals("DOWNLOAD_FILE")) {
                     downloadFile(clientSocket);
                 }
@@ -63,37 +61,9 @@ public class ProcessClient implements Runnable {
         }
     }
 
-    private void showListFile(Socket clientSocket) {
-
-        try {
-            String fileName = null;
-            String ipAdress = clientSocket.getInetAddress().getHostAddress();
-            DataInputStream dis = new DataInputStream(clientSocket.getInputStream());
-            DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
-            FileInputStream fis = null;
-
-            fileName = dis.readUTF();
-            File file = new File(rootDirServer + "\\" + ipAdress + "\\" + fileName);
-            if (file.exists()) {
-                fis = new FileInputStream(file);
-                byte[] buffer = new byte[4096];
-                int read = 0;
-                while ((read = fis.read(buffer)) > 0) {
-                    dos.write(buffer, 0, read);
-                }
-                fis.close();
-            } else {
-                dos.writeUTF("File not found");
-            }
-        } catch (Exception e) {
-            // TODO: handle exception
-        }
-    }
-
     private void downloadFile(Socket clientSocket) {
-
         try {
-
+            
             String fileName = null;
             String ipAdress = clientSocket.getInetAddress().getHostAddress();
             DataInputStream dis = new DataInputStream(clientSocket.getInputStream());

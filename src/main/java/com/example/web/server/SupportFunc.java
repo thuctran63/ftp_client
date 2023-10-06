@@ -1,4 +1,4 @@
-package com.example.server;
+package com.example.web.server;
 
 import java.io.File;
 

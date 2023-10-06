@@ -14,10 +14,23 @@
             padding: 0;
         }
     </style>
+    <script th:inline="javascript">
+        // Lấy giá trị từ Model
+        var successMessage = [[${successMessage}]];
+    
+        // Hàm này sẽ được gọi sau khi người dùng gửi dữ liệu
+        function showSuccessMessage() {
+            if (successMessage) {
+                alert(successMessage);
+            }
+            else{
+                alert("Gửi file thất bại");}
+        }
+    </script>
 </head>
 <body>
     <div class="container">
-        <form action="" method="post">
+        <form action="/sendfile" method="post">
             <table>
                 <tr>
                     <td><label for="username_reciver">Username người nhận:</label></td>
@@ -33,10 +46,11 @@
                     <td><textarea name="message" id="message" cols="30" rows="10"></textarea></td>
                 </tr>
                 <tr>
-                    <td><input type="submit" value="Gửi"></td>
+                    <td><input type="submit" value="Gửi" onclick="showSuccessMessage()"></td>
                 </tr>
             </table>
         </form>
     </div>
+    
 </body>
 </html>
