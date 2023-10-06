@@ -21,9 +21,7 @@ public class Client {
         try {
             InputStreamReader isr = new InputStreamReader(System.in);
             br = new BufferedReader(isr);
-            System.out.println("Enter the IP Destination Address:");
-            String ip = br.readLine(); 
-            client = new Socket(ip, 3333);
+            client = new Socket("localhost", 2023);
 
         } catch (Exception e) {
             System.out.println("Unable to Connect to Server");
