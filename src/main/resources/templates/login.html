@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link type="text/css" rel="stylesheet" th:href="@{css/login.css}">
+</head>
+<body>
+    <div class="container">
+        <div class="top">
+            <h1 class="title">
+                WELCOME TO THE <br> WEBSITE
+            </h1>
+            
+            <div class="decription">
+                <p>Fast, secure file transfer service</p>
+            </div>
+            <div class="create-account">
+                <a href="signUp.html">CREATE ACCOUNT</a>
+            </div>
+        </div>
+        <div class="bottom">
+
+            <h3>
+                USER LOGIN
+            </h3>
+
+            <form th:action="@{/login}" method="post">
+                <table>
+                    <tr>
+                        <td><span class="icon"></span></td>
+                        <td>
+                            <input type="text" th:field="${user.username}" placeholder="Username" size="40" name="username">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><span class="icon"></span></td>
+                        <td><input type="text" th:field="${user.password}" placeholder="Password" size="40" name="password"> </td>
+                    </tr>
+                </table>
+                <input type="submit" value="Login" class="btn-login" id="login-btn">
+            </form>
+
+        </div>
+    </div>
+</body>
+</html>

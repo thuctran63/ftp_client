@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style> 
-        @import url('https://fonts.googleapis.com/css2?family=Dosis:wght@300;800&family=Inter:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dosis:wght@300;800&family=Inter:wght@600&display=swap');
         *{
             margin: 0;
             padding: 0;
@@ -37,7 +30,7 @@
             flex-direction: column;
             justify-content: space-around;
             
-            background-image: url("images/image1.jpg");
+            background-image: url("../images/image1.jpg");
             background-size: cover;
             filter: brightness(1.6);
         }
@@ -109,47 +102,3 @@
             cursor: pointer;
             color: #ffff;
         }
-
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="top">
-            <h1 class="title">
-                WELCOME TO THE <br> WEBSITE
-            </h1>
-            
-            <div class="decription">
-                <p>Fast, secure file transfer service</p>
-            </div>
-            <div class="create-account">
-                <a href="signUp.html">CREATE ACCOUNT</a>
-            </div>
-        </div>
-        <div class="bottom">
-
-            <h3>
-                USER LOGIN
-            </h3>
-
-            <form action="">
-                <table>
-                    <tr>
-                        <td><span class="icon"></span></td>
-                        <td>
-                            <input type="text" placeholder="Username" size="40">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="icon"></span></td>
-                        <td><input type="text" placeholder="Password" size="40"></td>
-                    </tr>
-                </table>
-            </form>
-            
-            <button class="btn-login" >Login</button>
-
-        </div>
-    </div>
-</body>
-</html>

@@ -13,6 +13,8 @@ public class Client {
     private Socket clientSocket = null;
     private String ipHost = null;
     private int port = 0;
+    private String username = "";
+    private String password = "";
 
     private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     private DataInputStream dis = null;
@@ -20,9 +22,11 @@ public class Client {
     private FileInputStream fis = null;
     private FileOutputStream fos = null;
 
-    public Client(String ipHost, int port) {
+    public Client(String ipHost, int port, String username, String password) {
         this.ipHost = ipHost;
         this.port = port;
+        this.username = username;
+        this.password = password;
     }
 
     public boolean connect() {
@@ -31,16 +35,11 @@ public class Client {
             clientSocket = new Socket(ipHost, port);
             dis = new DataInputStream(clientSocket.getInputStream());
             dos = new DataOutputStream(clientSocket.getOutputStream());
-            System.out.println("Welcome to FTP server");
-            System.out.println("Enter your username and password to login!");
-            System.out.println("Enter your username: ");
-            String username = br.readLine();
+
             byte[] encryptedUsername = Security.getInstance().encryptData(username);
             dos.writeInt(encryptedUsername.length);
             dos.write(encryptedUsername);
 
-            System.out.println("Enter your password: ");
-            String password = br.readLine();
             byte[] encryptedPassword = Security.getInstance().encryptData(password);
             dos.writeInt(encryptedPassword.length);
             dos.write(encryptedPassword);
@@ -154,11 +153,5 @@ public class Client {
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
-    }
-
-    public static void main(String[] args) {
-            
-            Client client = new Client("localhost", 2023);
-            client.doTask();
     }
 }
