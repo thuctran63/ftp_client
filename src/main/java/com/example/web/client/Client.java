@@ -44,10 +44,11 @@ public class Client {
             dos.writeInt(encryptedPassword.length);
             dos.write(encryptedPassword);
 
-            if(dis.readUTF().equals("AUTHENTICATE_SUCCESS")){
+            if (dis.readUTF().equals("AUTHENTICATE_SUCCESS")) {
                 return true;
+            } else {
+                return false;
             }
-            return false;
 
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
@@ -56,16 +57,10 @@ public class Client {
     }
 
     public void doTask() {
-
         try {
             if (connect()) {
                 while (true) {
-                    System.out.println("1. Send file to server");
-                    System.out.println("2. Receive file from server");
-                    System.out.println("3. Set current folder");
-                    System.out.println("4. Show list file");
-                    System.out.println("5. Exit");
-                    System.out.print("Your choice: ");
+
                     int choice = Integer.parseInt(br.readLine());
 
                     if (choice == 1) {
@@ -79,23 +74,22 @@ public class Client {
                         fis = new FileInputStream(filePath);
                         byte[] buffer = new byte[4096];
                         int read = 0;
-        
+
                         while (true) {
-                            if((read = fis.read(buffer)) > 0){
+                            if ((read = fis.read(buffer)) > 0) {
                                 dos.writeUTF("SENDED");
                                 dos.flush();
                                 dos.write(buffer, 0, read);
 
-                                if(!dis.readUTF().equals("ACK")){
+                                if (!dis.readUTF().equals("ACK")) {
                                     dos.writeUTF("DONE");
                                     break;
                                 }
-                            }
-                            else{
+                            } else {
                                 dos.writeUTF("DONE");
                                 break;
                             }
-                            
+
                         }
 
                         fis.close();
@@ -107,10 +101,10 @@ public class Client {
                         System.out.print("Enter file name to download: ");
                         String fileName = br.readLine();
                         dos.writeUTF(fileName);
-                        
+
                         System.out.print("Enter file path to save: ");
                         String filePath = br.readLine();
-                        fos = new FileOutputStream(filePath +  "//" + fileName);
+                        fos = new FileOutputStream(filePath + "//" + fileName);
                         byte[] buffer = new byte[4096];
                         int read = 0;
                         dos.writeUTF("READY_TO_SEND");
@@ -124,31 +118,63 @@ public class Client {
                                 break;
                             }
                         }
-            
+
                         fos.close();
                         System.out.println("File " + fileName + " received from server");
 
                     } else if (choice == 5) {
                         System.out.println("Exit");
                         break;
-                    }
-                    else if(choice == 3){
+                    } else if (choice == 3) {
                         dos.writeUTF("SET_CURRENT_FOLDER");
                         System.out.print("Enter folder path: ");
                         String folderPath = br.readLine();
                         dos.writeUTF(folderPath);
-                    }
-                    else if(choice == 4){
+                    } else if (choice == 4) {
                         dos.writeUTF("SHOW_LIST_FILE");
                         String listFile = dis.readUTF();
                         System.out.println(listFile);
                     }
-                    
+
                     else {
                         System.out.println("Invalid choice");
                     }
                 }
             }
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    public void sendFile(String filePath) {
+        try {
+            dos.writeUTF("SEND_FILE");
+            dos.writeUTF(filePath);
+
+            // gửi file cho server
+            fis = new FileInputStream(filePath);
+            byte[] buffer = new byte[4096];
+            int read = 0;
+
+            while (true) {
+                if ((read = fis.read(buffer)) > 0) {
+                    dos.writeUTF("SENDED");
+                    dos.flush();
+                    dos.write(buffer, 0, read);
+
+                    if (!dis.readUTF().equals("ACK")) {
+                        dos.writeUTF("DONE");
+                        break;
+                    }
+                } else {
+                    dos.writeUTF("DONE");
+                    break;
+                }
+            }
+
+            fis.close();
+            System.out.println("File " + filePath + " sent to server");
 
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
