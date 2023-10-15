@@ -1,42 +1,28 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <style>
-        *{
-            margin: 0;
-            padding: 0;
-        }
-        body{
-            margin: 0;
-            padding: 0;
-        }
-    </style>
+    <link type="text/css" rel="stylesheet" th:href="@{css/sendfile.css}">
+
     <script th:inline="javascript">
-        var successMessage = [[${message}]];
-        function check(message) {
-            if (successMessage === "SUCCESS") {
-                alert("Gửi file thành công");
-            } else {
-                alert("Gửi file thất bại");
-            }
+        var message = [[${message}]];
+        if(message == "SUCCESS") {
+            alert("Đã gửi file thành công!");
+        }
+        else if(message == "FAIL"){
+            alert("Gửi file thất bại!");
         }
     </script>
 </head>
 <body>
     <div class="container">
+        <h1>Send file to server</h1>
         <form action="/sendfile" method="post">
-            <table>
-                <tr>
-                    <td>File path: </td>
-                    <td><input type="text" name="filepath" id="filepath"></td>
-                </tr>
-                <tr>
-                    <td colspan="2"><input type="submit" value="Gửi file" onclick="check()"></td>
-                </tr>
-            </table>
+            <label for="filepath">File path:</label>
+            <input type="text" name="filepath" id="filepath">
+            <input type="submit" value="Upload File">
         </form>
     </div>
 </body>

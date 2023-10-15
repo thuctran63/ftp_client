@@ -1,23 +1,23 @@
 package com.example.web;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.example.web.client.Client;
 import com.example.web.model.User;
-
 import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class WebController {
 
     Client client = null;
-    
+
     @GetMapping("/")
     public String index(HttpServletRequest request) {
         String clientIp = request.getRemoteAddr();
@@ -56,22 +56,34 @@ public class WebController {
     }
 
     @GetMapping("/sendfile")
-    public String upload() {
+    public String sendfile() {
         return "sendfile";
     }
 
     @PostMapping("/sendfile")
-    public String uploadFile(@RequestParam("filepath") String filepath, Model model) {
+    public String sendfile(@RequestParam("filepath") String filepath, Model model) {
         if (!filepath.isEmpty()) {
-
-            System.out.println("Đã nhận tệp tin: " + filepath);
             client.sendFile(filepath);
-            // Làm gì đó với đường dẫn tệp tin tại đây
             model.addAttribute("message", "SUCCESS");
-            return "sendfile";
-        } else {
             return "redirect:/sendfile";
+        } else {
+            model.addAttribute("message", "FAIL");
+            return "sendfile";
         }
+    }
+
+    @GetMapping("/showfile")
+    public String showfile(Model model) {
+        return "showfile";
+    }
+
+    @PostMapping("/showfile")
+    public String getFile(@RequestParam(name = "path", defaultValue = "") String path, Model model) {
+        String[] arr = (client.getListFile(path)).split("\n");
+        List<String> list = Arrays.asList(arr);
+        model.addAttribute("list", list);
+        model.addAttribute("lastPath", path);
+        return "showfile";
     }
 
 }

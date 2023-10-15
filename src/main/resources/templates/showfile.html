@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style th:inline="css">
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            grid-template-rows: repeat(9, 1fr);
+            gap: 10px
+        }        
+
+        .folder {
+            width: 200px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+        .folder p{
+            margin-left: 5px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        #set_dir_form {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+          }
+          
+          #set_dir {
+            margin-bottom: 10px;
+          }
+          
+          #dir {
+            width: 200px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+          }
+          
+          #set_dir_btn {
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+          }
+          
+          #set_dir_btn:hover {
+            background-color: #45a049;
+          }
+    </style>
+    <script th:inline="javascript" >
+        window.addEventListener('load', function(){
+            const folders = document.querySelectorAll('.folder');
+            folders.forEach(function(folder) {
+                folder.addEventListener('click', function(){
+                    alert('Folder clicked');
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <form id="set_dir_form" action="/showfile" method="post">
+        <div id="set_dir">
+            <input type="text" name="path" id="dir" th:value="${lastPath}">
+            <button id="set_dir_btn" type="submit">Set</button>
+        </div>
+    </form>    
+    <div class="container">
+        <div class="folder" th:each="item : ${list}" >
+            <i class="fa-solid fa-folder fa-2xl"></i>
+            <p th:text="${item}"></p>
+        </div>
+    </div>
+</body>
+</html>

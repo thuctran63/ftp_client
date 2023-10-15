@@ -180,4 +180,16 @@ public class Client {
             System.out.println("Error: " + e.getMessage());
         }
     }
+
+    public String getListFile(String path) {
+        try {
+            dos.writeUTF("SHOW_LIST_FILE");
+            dos.writeUTF(path);
+            String listFile = dis.readUTF();
+            return listFile;
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+            return null;
+        }
+    }
 }
