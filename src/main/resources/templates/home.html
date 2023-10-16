@@ -9,81 +9,85 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
-    <style>
-        *{
-            margin: 0;
-            padding: 0;
-        }
-        body{
-            width: 100vw;
-            height: 100vh;
-            display: grid;
-            grid-template-columns: 1fr 7fr;
-            grid-template-rows: 1fr 7fr;
-        }
-        .header{
-            display:  flex;    
-            grid-column: 1/3;
-            grid-row: 1/2;
-            border: 1px solid whitesmoke;
-        }
-            .logo{
-                display: flex;
-                height: auto;
-                width: auto;
-                justify-content: center;
-            }
-        
-        .navbar{
-            grid-column: 1/2;
-            grid-row: 2/3;
-            border: 1px solid whitesmoke;
-        }
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    body{
+        width: 100vw;
+        height: 100vh;
+        display: grid;
+        grid-template-columns: 1fr 7fr;
+        grid-template-rows: 1fr 7fr;
+    }
+    .header{
+        display:  flex;    
+        grid-column: 1/3;
+        grid-row: 1/2;
+        border: 1px solid whitesmoke;
+        align-items: center;
+        padding: 10px;
+    }
+    .logo{
+        display: flex;
+        height: auto;
+        width: auto;
+        justify-content: center;
+    }
 
-        .content{
-            grid-column: 2/3;
-            grid-row: 2/3;
-            position: relative; /* Thêm dòng này */
-        }
-            iframe{
-                width: 100%;
-                height: 100%;
-                position: absolute; /* Thêm dòng này */
-                top: 0; /* Thêm dòng này */
-                left: 0; /* Thêm dòng này */
-                border: none;
-            }
-    </style>
-</head>
+    .navbar{
+        grid-column: 1/2;
+        grid-row: 2/3;
+        border: 1px solid whitesmoke;
+    }
+
+    .content{
+        grid-column: 2/3;
+        grid-row: 2/3;
+        position: relative;
+        padding: 20px;
+    }
+
+    iframe{
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        border: none;
+    }
+</style>
 <body>
-        <div class="header">
-            <div class="logo">
-                <img src="images/logo.png" alt="">
-            </div>
-    
-            <div class="user">
-    
-            </div>
+    <div class="header">
+        <div class="logo">
+            <img src="images/logo.png" alt="">
         </div>
 
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <ul class="navbar-nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/sendfile" target="frame_main">Gửi File</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/showfile" target="frame_main">Xem file</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Sản phẩm</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Liên hệ</a>
-                    </li>
-                </ul>
-            </nav>
-        <div class="content">
-            <iframe src="" frameborder="0" name="frame_main"></iframe>
+        <div class="user">
+
         </div>
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <ul class="navbar-nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link" href="/sendfile" target="frame_main">Gửi File</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/showfile" target="frame_main">Xem file</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Sản phẩm</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Liên hệ</a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="content">
+        <iframe src="" frameborder="0" name="frame_main"></iframe>
+    </div>
 </body>
 </html>

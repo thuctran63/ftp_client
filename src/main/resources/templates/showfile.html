@@ -12,7 +12,7 @@
         .container {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
-            grid-template-rows: repeat(9, 1fr);
+            grid-template-rows: repeat(6, 1fr);
             gap: 10px
         }        
 
@@ -56,18 +56,125 @@
           #set_dir_btn:hover {
             background-color: #45a049;
           }
+
+          .options {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            padding: 5px;
+        }
+        
+        .option {
+            padding: 5px;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+        }
+        
+        .option:hover {
+            background-color: #f2f2f2;
+        }
+        .download-container{
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+        
+          .download-popup{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 300px;
+            height: 200px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+          }
     </style>
     <script th:inline="javascript" >
+
+        function isHaveOptions(folder) {
+            const options = folder.querySelector('.options');
+            if(options) {
+                return true;
+            }
+            return false;
+        }
+
+        function viewDownload() {
+
+            const container = document.createElement('div');
+            const popup = document.createElement('div');
+            const form = document.createElement('form');
+            form.setAttribute('method', 'post');
+            form.setAttribute('action', '/download');
+
+            const input = document.createElement('input');
+            input.setAttribute('type', 'text');
+            input.setAttribute('name', 'path');
+
+            const button = document.createElement('button');
+            button.setAttribute('type', 'submit');
+            button.textContent = 'Tải về';
+
+            form.appendChild(input);
+            form.appendChild(button);
+            popup.appendChild(form);
+            container.appendChild(popup);
+            document.body.appendChild(container);
+            container.classList.add('download-container');
+            popup.classList.add('download-popup');
+
+        }
         window.addEventListener('load', function(){
             const folders = document.querySelectorAll('.folder');
             folders.forEach(function(folder) {
                 folder.addEventListener('click', function(){
-                    alert('Folder clicked');
+
+                    if(isHaveOptions(folder)) {
+                        return;
+                    }
+
+                    const options = document.createElement('div');
+                    options.classList.add('options');
+                    options.innerHTML =
+                    `
+                        <button class="option" onclick="viewDownload()">Tải về</button>
+                        <button class="option">Xoá</button>
+                    `;
+                    folder.appendChild(options);
+
+                    options.addEventListener('mouseleave', function(){
+                        options.remove();
+                    });
                 });
+
+                folder.addEventListener('dblclick', function() {
+                    const form = document.getElementById('set_dir_form');
+                    const pathInput = form.querySelector('#dir');
+                    const folderName = this.querySelector('p').textContent;
+                    pathInput.value += "\\" + folderName;
+                    form.submit();
+                  });
             });
-        });
+        });        
     </script>
 </head>
+
+
 <body>
     <form id="set_dir_form" action="/showfile" method="post">
         <div id="set_dir">
