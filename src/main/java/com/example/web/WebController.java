@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.example.web.client.Client;
-import com.example.web.model.User;
+import com.example.web.model.Host;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
@@ -27,14 +27,14 @@ public class WebController {
 
     @GetMapping("/login")
     public String login(Model model) {
-        model.addAttribute("user", new User());
+        model.addAttribute("host", new Host());
         return "login";
     }
 
     @PostMapping("/login")
-    public String login(@ModelAttribute("user") User user) {
+    public String login(@ModelAttribute("host") Host host) {
         try {
-            client = new Client("localhost", 2023, user.getUsername(), user.getPassword());
+            client = new Client("localhost", 2023, host.getIpHost() , host.getPort());
             if (client.connect()) {
                 return "redirect:/home";
             }
@@ -63,17 +63,22 @@ public class WebController {
     @PostMapping("/sendfile")
     public String sendfile(@RequestParam("filepath") String filepath, Model model) {
         if (!filepath.isEmpty()) {
-            client.sendFile(filepath);
-            model.addAttribute("message", "SUCCESS");
-            return "redirect:/sendfile";
-        } else {
+            if(client.sendFile(filepath)){
+                model.addAttribute("message", "SUCCESS");
+                return "sendfile";
+            }
             model.addAttribute("message", "FAIL");
+            return "sendfile";
+        } else {
+            model.addAttribute("message", "Enter file path before send");
             return "sendfile";
         }
     }
 
     @GetMapping("/showfile")
     public String showfile(Model model) {
+        List<String> list = Arrays.asList("C:", "D:", "E:");
+        model.addAttribute("list", list);
         return "showfile";
     }
 
@@ -85,5 +90,7 @@ public class WebController {
         model.addAttribute("lastPath", path);
         return "showfile";
     }
+
+
 
 }

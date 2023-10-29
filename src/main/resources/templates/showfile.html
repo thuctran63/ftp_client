@@ -166,7 +166,7 @@
                     const form = document.getElementById('set_dir_form');
                     const pathInput = form.querySelector('#dir');
                     const folderName = this.querySelector('p').textContent;
-                    pathInput.value += "\\" + folderName;
+                    pathInput.value += folderName + '\\';
                     form.submit();
                   });
             });

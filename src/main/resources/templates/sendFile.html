@@ -8,6 +8,7 @@
 
     <script th:inline="javascript">
         var message = [[${message}]];
+        console.log(message);
         if(message == "SUCCESS") {
             alert("Đã gửi file thành công!");
         }

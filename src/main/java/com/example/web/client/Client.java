@@ -13,8 +13,6 @@ public class Client {
     private Socket clientSocket = null;
     private String ipHost = null;
     private int port = 0;
-    private String username = "";
-    private String password = "";
 
     private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     private DataInputStream dis = null;
@@ -25,30 +23,15 @@ public class Client {
     public Client(String ipHost, int port, String username, String password) {
         this.ipHost = ipHost;
         this.port = port;
-        this.username = username;
-        this.password = password;
     }
 
     public boolean connect() {
         try {
-
+            
             clientSocket = new Socket(ipHost, port);
             dis = new DataInputStream(clientSocket.getInputStream());
             dos = new DataOutputStream(clientSocket.getOutputStream());
-
-            byte[] encryptedUsername = Security.getInstance().encryptData(username);
-            dos.writeInt(encryptedUsername.length);
-            dos.write(encryptedUsername);
-
-            byte[] encryptedPassword = Security.getInstance().encryptData(password);
-            dos.writeInt(encryptedPassword.length);
-            dos.write(encryptedPassword);
-
-            if (dis.readUTF().equals("AUTHENTICATE_SUCCESS")) {
-                return true;
-            } else {
-                return false;
-            }
+            return true;
 
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
@@ -147,7 +130,7 @@ public class Client {
         }
     }
 
-    public void sendFile(String filePath) {
+    public boolean sendFile(String filePath) {
         try {
             dos.writeUTF("SEND_FILE");
             dos.writeUTF(filePath);
@@ -175,9 +158,11 @@ public class Client {
 
             fis.close();
             System.out.println("File " + filePath + " sent to server");
+            return true;
 
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
+            return false;
         }
     }
 
