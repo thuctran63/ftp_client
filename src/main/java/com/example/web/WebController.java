@@ -61,9 +61,9 @@ public class WebController {
     }
 
     @PostMapping("/sendfile")
-    public String sendfile(@RequestParam("filepath") String filepath, Model model) {
+    public String sendfile(@RequestParam("filepath") String filepath, @RequestParam("target_dir") String pathSave, Model model) {
         if (!filepath.isEmpty()) {
-            if(client.sendFile(filepath)){
+            if(client.sendFile(filepath, pathSave)){
                 model.addAttribute("message", "SUCCESS");
                 return "sendfile";
             }

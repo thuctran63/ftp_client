@@ -21,6 +21,8 @@
     <div class="container">
         <h1>Send file to server</h1>
         <form action="/sendfile" method="post">
+            <label for="target_dir">Set directory:</label>
+            <input type="text" name="target_dir" id="target_dir">
             <label for="filepath">File path:</label>
             <input type="text" name="filepath" id="filepath">
             <input type="submit" value="Upload File">

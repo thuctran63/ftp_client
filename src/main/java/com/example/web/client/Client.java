@@ -130,10 +130,11 @@ public class Client {
         }
     }
 
-    public boolean sendFile(String filePath) {
+    public boolean sendFile(String filePath, String pathSave) {
         try {
             dos.writeUTF("SEND_FILE");
             dos.writeUTF(filePath);
+            dos.writeUTF(pathSave);
 
             // gửi file cho server
             fis = new FileInputStream(filePath);
