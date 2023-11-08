@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
@@ -8,13 +9,12 @@
     <title>Document</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style th:inline="css">
-
         .container {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
             grid-template-rows: repeat(6, 1fr);
             gap: 10px
-        }        
+        }
 
         .folder {
             width: 200px;
@@ -23,41 +23,43 @@
             align-items: center;
             justify-content: flex-start;
         }
-        .folder p{
+
+        .folder p {
             margin-left: 5px;
             font-family: 'Courier New', Courier, monospace;
         }
+
         #set_dir_form {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-          }
-          
-          #set_dir {
+        }
+
+        #set_dir {
             margin-bottom: 10px;
-          }
-          
-          #dir {
+        }
+
+        #dir {
             width: 200px;
             padding: 5px;
             border: 1px solid #ccc;
             border-radius: 3px;
-          }
-          
-          #set_dir_btn {
+        }
+
+        #set_dir_btn {
             padding: 8px 16px;
             background-color: #4CAF50;
             color: white;
             border: none;
             border-radius: 3px;
             cursor: pointer;
-          }
-          
-          #set_dir_btn:hover {
-            background-color: #45a049;
-          }
+        }
 
-          .options {
+        #set_dir_btn:hover {
+            background-color: #45a049;
+        }
+
+        .options {
             position: relative;
             display: flex;
             flex-direction: column;
@@ -68,107 +70,84 @@
             border-radius: 3px;
             padding: 5px;
         }
-        
+
         .option {
             padding: 5px;
             border: none;
             background-color: transparent;
             cursor: pointer;
         }
-        
+
         .option:hover {
             background-color: #f2f2f2;
         }
-        .download-container{
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-          }
-        
-          .download-popup{
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 300px;
-            height: 200px;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-          }
     </style>
-    <script th:inline="javascript" >
+    <script th:inline="javascript">
 
         function isHaveOptions(folder) {
             const options = folder.querySelector('.options');
-            if(options) {
+            if (options) {
                 return true;
             }
             return false;
         }
-
-        function viewDownload() {
-
-            const container = document.createElement('div');
-            const popup = document.createElement('div');
+        function download(button) {
+            const folderName = button.closest('.folder').querySelector('p').textContent;
+            const path = document.getElementById('dir').value + folderName;
+            console.log(path);
             const form = document.createElement('form');
             form.setAttribute('method', 'post');
             form.setAttribute('action', '/download');
 
-            const input = document.createElement('input');
-            input.setAttribute('type', 'text');
-            input.setAttribute('name', 'path');
+            const hiddenField = document.createElement('input');
+            hiddenField.setAttribute('type', 'hidden');
+            hiddenField.setAttribute('name', 'filePathDownload');
+            hiddenField.setAttribute('value', path);
 
-            const button = document.createElement('button');
-            button.setAttribute('type', 'submit');
-            button.textContent = 'Tải về';
+            form.appendChild(hiddenField);
 
-            form.appendChild(input);
-            form.appendChild(button);
-            popup.appendChild(form);
-            container.appendChild(popup);
-            document.body.appendChild(container);
-            container.classList.add('download-container');
-            popup.classList.add('download-popup');
-
+            document.body.appendChild(form);
+            form.submit();
         }
-        window.addEventListener('load', function(){
+        window.addEventListener('load', function () {
+            var message = [[${message}]];
+            console.log(message);
+            if (message == 'SUCCESS') {
+                alert("Download thàn công");
+            }
+            else if (message == 'FAIL'){
+                alert("Download thất bại");
+            }
             const folders = document.querySelectorAll('.folder');
-            folders.forEach(function(folder) {
-                folder.addEventListener('click', function(){
+            folders.forEach(function (folder) {
+                folder.addEventListener('click', function () {
 
-                    if(isHaveOptions(folder)) {
+                    if (isHaveOptions(folder)) {
                         return;
                     }
 
                     const options = document.createElement('div');
                     options.classList.add('options');
                     options.innerHTML =
-                    `
-                        <button class="option" onclick="viewDownload()">Tải về</button>
+                        `
+                        <button class="option" onclick="download(this)">Tải về</button>
                         <button class="option">Xoá</button>
                     `;
                     folder.appendChild(options);
 
-                    options.addEventListener('mouseleave', function(){
+                    options.addEventListener('mouseleave', function () {
                         options.remove();
                     });
                 });
 
-                folder.addEventListener('dblclick', function() {
+                folder.addEventListener('dblclick', function () {
                     const form = document.getElementById('set_dir_form');
                     const pathInput = form.querySelector('#dir');
                     const folderName = this.querySelector('p').textContent;
                     pathInput.value += folderName + '\\';
+                    alert(pathInput.value);
                     form.submit();
-                  });
+                });
             });
         });        
     </script>
@@ -181,12 +160,17 @@
             <input type="text" name="path" id="dir" th:value="${lastPath}">
             <button id="set_dir_btn" type="submit">Set</button>
         </div>
-    </form>    
+    </form>
     <div class="container">
-        <div class="folder" th:each="item : ${list}" >
+        <div class="folder" th:each="item : ${listDirectory}">
             <i class="fa-solid fa-folder fa-2xl"></i>
+            <p th:text="${item}"></p>
+        </div>
+        <div class="folder" th:each="item : ${listFile}">
+            <i class="fa-regular fa-file fa-2xl"></i>
             <p th:text="${item}"></p>
         </div>
     </div>
 </body>
+
 </html>

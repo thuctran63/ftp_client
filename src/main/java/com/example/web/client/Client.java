@@ -1,5 +1,6 @@
 package com.example.web.client;
 
+import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -7,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.List;
 
 public class Client {
 
@@ -27,7 +29,7 @@ public class Client {
 
     public boolean connect() {
         try {
-            
+
             clientSocket = new Socket(ipHost, port);
             dis = new DataInputStream(clientSocket.getInputStream());
             dos = new DataOutputStream(clientSocket.getOutputStream());
@@ -48,62 +50,7 @@ public class Client {
 
                     if (choice == 1) {
 
-                        dos.writeUTF("SEND_FILE");
-                        System.out.print("Enter file path: ");
-                        String filePath = br.readLine();
-                        dos.writeUTF(filePath);
-
-                        // gửi file cho server
-                        fis = new FileInputStream(filePath);
-                        byte[] buffer = new byte[4096];
-                        int read = 0;
-
-                        while (true) {
-                            if ((read = fis.read(buffer)) > 0) {
-                                dos.writeUTF("SENDED");
-                                dos.flush();
-                                dos.write(buffer, 0, read);
-
-                                if (!dis.readUTF().equals("ACK")) {
-                                    dos.writeUTF("DONE");
-                                    break;
-                                }
-                            } else {
-                                dos.writeUTF("DONE");
-                                break;
-                            }
-
-                        }
-
-                        fis.close();
-                        System.out.println("File " + filePath + " sent to server");
-
                     } else if (choice == 2) {
-
-                        dos.writeUTF("RECEIVE_FILE");
-                        System.out.print("Enter file name to download: ");
-                        String fileName = br.readLine();
-                        dos.writeUTF(fileName);
-
-                        System.out.print("Enter file path to save: ");
-                        String filePath = br.readLine();
-                        fos = new FileOutputStream(filePath + "//" + fileName);
-                        byte[] buffer = new byte[4096];
-                        int read = 0;
-                        dos.writeUTF("READY_TO_SEND");
-                        while (true) {
-                            if (dis.readUTF().equals("SENDED")) {
-
-                                read = dis.read(buffer);
-                                dos.writeUTF("ACK");
-                                fos.write(buffer, 0, read);
-                            } else {
-                                break;
-                            }
-                        }
-
-                        fos.close();
-                        System.out.println("File " + fileName + " received from server");
 
                     } else if (choice == 5) {
                         System.out.println("Exit");
@@ -136,8 +83,9 @@ public class Client {
             dos.writeUTF(filePath);
             dos.writeUTF(pathSave);
 
+            String fileName = filePath.substring(filePath.lastIndexOf("\\") + 1, filePath.length());
             // gửi file cho server
-            fis = new FileInputStream(filePath);
+            fis = new FileInputStream(System.getProperty("user.dir") + "\\"+ fileName);
             byte[] buffer = new byte[4096];
             int read = 0;
 
@@ -167,15 +115,51 @@ public class Client {
         }
     }
 
-    public String getListFile(String path) {
+    public List<String> getListFile(String path) {
         try {
             dos.writeUTF("SHOW_LIST_FILE");
             dos.writeUTF(path);
             String listFile = dis.readUTF();
-            return listFile;
+            String listDirectory = dis.readUTF();
+
+            List<String> resultList = new ArrayList<>();
+            resultList.add(listFile);
+            resultList.add(listDirectory);
+
+            return resultList;
+
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
             return null;
         }
     }
+
+    public boolean recivedFile(String filePath) {
+        try {
+            dos.writeUTF("RECEIVE_FILE");
+            dos.writeUTF(filePath);
+            String fileName = filePath.substring(filePath.lastIndexOf("\\") + 1, filePath.length());
+            fos = new FileOutputStream("E:\\test\\" + fileName);
+            byte[] buffer = new byte[4096];
+            int read = 0;
+            dos.writeUTF("READY_TO_SEND");
+            while (true) {
+                if (dis.readUTF().equals("SENDED")) {
+
+                    read = dis.read(buffer);
+                    dos.writeUTF("ACK");
+                    fos.write(buffer, 0, read);
+                } else {
+                    break;
+                }
+            }
+            System.out.println("File " + filePath + " received from server");
+            fos.close();
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        return false;
+    }
+
 }

@@ -78,19 +78,36 @@ public class WebController {
     @GetMapping("/showfile")
     public String showfile(Model model) {
         List<String> list = Arrays.asList("C:", "D:", "E:");
-        model.addAttribute("list", list);
+        model.addAttribute("listDirectory", list);
         return "showfile";
     }
 
     @PostMapping("/showfile")
     public String getFile(@RequestParam(name = "path", defaultValue = "") String path, Model model) {
-        String[] arr = (client.getListFile(path)).split("\n");
-        List<String> list = Arrays.asList(arr);
-        model.addAttribute("list", list);
+
+        List<String> list = client.getListFile(path);
+        List<String> listDirectory = Arrays.asList(list.get(1).split("\n"));
+        List<String> listFile = Arrays.asList(list.get(0).split("\n"));
+        model.addAttribute("listDirectory", listDirectory);
+        model.addAttribute("listFile", listFile);
         model.addAttribute("lastPath", path);
         return "showfile";
     }
 
+    @PostMapping("/download")
+    public String download(@RequestParam(name = "filePathDownload", defaultValue = "") String path, Model model) {
+        if (!path.isEmpty()) {
+            if (client.recivedFile(path)) {
+                model.addAttribute("message", "SUCCESS");
+            }
+            else{
+                model.addAttribute("message", "FAIL");
+            }
+        } else {
+            model.addAttribute("message", "Enter file path before download");
+        }
+        return "showfile";
+    }
 
 
 }
